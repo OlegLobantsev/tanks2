@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Вагоны</h1>
+<style>
+    table, td, th {
+  border: 3px solid #245488;
+}
+
+    th, td {
+  padding: 1px 1px;
+  text-align: center;
+
+    .text-oc {
+  color: #ff6247;
+    }
+}
+</style>
+<table>
+    <thead>
+        <tr>
+            <th>Номер вагона</th>
+            <th>Вес</th>
+            <th>Квитанция</th>
+            <th>Дата доставки</th>
+            <th>Дата подачи</th>
+            <th>Просрочка</th>
+            <th>Дата подачи</th>
+            <th>Дата выгрузки</th>
+            <th>Дата уборки</th>
+            <th>Акт приема</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in records %}
+        <tr>
+            <td>{{ record.number }}</td>
+            <td>{{ record.weight }}</td>
+            <td>
+                {% if record.file1 %}
+                <a href="{{ record.file1.url }}">
+                <img
+                src="https://img.icons8.com/?size=30&id=8ZGZTnARklCg&format=png&color=228BE6">
+                </a>
+                {% else %}
+                {% endif %}
+            </td>
+            <td>{{ record.date_delivery|date:'d.m.Y' }}</td>
+            <td>{{ record.date_submission|date:'d.m.Y' }}</td>
+            <td><span class="text-oc">
+                {% if record.get_days_late == 0 %}
+                {% else %}
+                {{ record.get_days_late }}
+                {% endif %}</span></td>
+            <td>{{ record.submission_to_database|date:'d.m.Y' }}</td>
+            <td>{{ record.shipment_date_time|date:'d.m.Y H:i' }}</td>
+            <td>{{ record.withdrawal_from_bases|date:'d.m.Y' }}</td>
+            <td>
+                {% if record.file2 %}
+                <a href="{{ record.file2.url }}">
+                <img
+                src="https://img.icons8.com/?size=30&id=8ZGZTnARklCg&format=png&color=228BE6"></a>
+                </a>
+                {% else %}
+                {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'record_update' record.pk %}">
+                    <img
+                    src="https://img.icons8.com/?size=20&id=47749&format=png&color=228BE6"> </a>
+                <a href="{% url 'record_delete' record.pk %}">
+                    <img
+                    src="https://img.icons8.com/?size=20&id=11767&format=png&color=228BE6"> </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'record_create' %}">
+   <img
+   src="https://img.icons8.com/?size=50&id=40097&format=png&color=228BE6"> </a>
+{% endblock %}
+
+https://img.icons8.com/?size=100&id=47749&format=png&color=228BE6

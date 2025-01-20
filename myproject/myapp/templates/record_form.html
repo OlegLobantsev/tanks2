@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 xmlns="">{% if object %}Update{% else %}Создание{% endif %} записи</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div><label>Номер вагона:</label>  {{ form.number }}</div>
+    <div><label>Вес:</label>  {{ form.weight }}</div>
+    <div><label>Квитанция:</label>  {{ form.file1 }}</div>
+    <div><label>Дата доставки:</label>  {{ form.date_delivery }}</div>
+    <div><label>Дата подачи:</label>  {{ form.date_submission }}</div>
+    <div><label>Дата подачи на базу:</label>  {{ form.submission_to_database }}</div>
+    <div><label>Дата выгрузки:</label>  {{ form.shipment_date_time }}</div>
+    <div><label>Дата уборки:</label>  {{ form.withdrawal_from_bases }}</div>
+    <div><label>Акт приема:</label>  {{ form.file2 }}</div>
+    <button type="submit">Сохранить</button>
+    <input type="button" value="Отмена" onclick="document.location.href='/'">
+</form>
+{% endblock %}

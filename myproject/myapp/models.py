@@ -5,11 +5,11 @@ class Record(models.Model):
     number = models.IntegerField(unique=True)
     weight = models.FloatField()
     file1 = models.FileField(upload_to='files/', blank=True, null=True)
-    date_delivery = models.DateField()
-    date_submission = models.DateField()
-    submission_to_database = models.DateField()
+    date_delivery = models.DateTimeField()
+    date_submission = models.DateTimeField()
+    submission_to_database = models.DateTimeField()
     shipment_date_time = models.DateTimeField()
-    withdrawal_from_bases = models.DateField()
+    withdrawal_from_bases = models.DateTimeField()
     file2 = models.FileField(upload_to='files/', blank=True, null=True)
 
     def get_days_late(self):
@@ -17,7 +17,9 @@ class Record(models.Model):
             delta = self.date_submission - self.date_delivery
             return delta.days
         return 0
-
+    def get_days_total(self):
+        delta = self.withdrawal_from_bases - self.date_submission
+        return delta.days
     def __str__(self):
         return f"Record {self.number}"
 

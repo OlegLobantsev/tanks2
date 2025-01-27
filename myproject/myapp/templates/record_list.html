@@ -22,13 +22,14 @@
             <th>Номер вагона</th>
             <th>Вес</th>
             <th>Квитанция</th>
-            <th>Дата доставки</th>
-            <th>Дата подачи</th>
+            <th>Дата по накладной</th>
+            <th>Дата прибытия на станцию</th>
             <th>Просрочка</th>
-            <th>Дата подачи</th>
-            <th>Дата выгрузки</th>
+            <th>Дата подачи на базу</th>
+            <th>Уведомление о завершении грузовой операции</th>
             <th>Дата уборки</th>
-            <th>Акт приема</th>
+            <th>Общее время</th>
+            <th>Акт приемосдатчика</th>
             <th>Действия</th>
         </tr>
     </thead>
@@ -46,22 +47,22 @@
                 {% else %}
                 {% endif %}
             </td>
-            <td>{{ record.date_delivery|date:'d.m.Y' }}</td>
-            <td>{{ record.date_submission|date:'d.m.Y' }}</td>
+            <td>{{ record.date_delivery|date:'d.m.Y H:i' }}</td>
+            <td>{{ record.date_submission|date:'d.m.Y H:i' }}</td>
             <td><span class="text-oc">
                 {% if record.get_days_late == 0 %}
                 {% else %}
                 {{ record.get_days_late }}
                 {% endif %}</span></td>
-            <td>{{ record.submission_to_database|date:'d.m.Y' }}</td>
+            <td>{{ record.submission_to_database|date:'d.m.Y H:i' }}</td>
             <td>{{ record.shipment_date_time|date:'d.m.Y H:i' }}</td>
-            <td>{{ record.withdrawal_from_bases|date:'d.m.Y' }}</td>
+            <td>{{ record.withdrawal_from_bases|date:'d.m.Y H:i' }}</td>
+            <td><span class="text-oc">{{ record.get_days_total }}</span></td>
             <td>
                 {% if record.file2 %}
                 <a href="{{ record.file2.url }}">
                 <img
                 src="https://img.icons8.com/?size=30&id=8ZGZTnARklCg&format=png&color=228BE6"></a>
-                </a>
                 {% else %}
                 {% endif %}
             </td>

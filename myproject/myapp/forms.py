@@ -11,9 +11,9 @@ class RecordForm(forms.ModelForm):
             'shipment_date_time', 'withdrawal_from_bases', 'file2'
         ]
         widgets = {
-            'date_delivery': forms.DateInput(attrs={'type': 'date'}),
-            'date_submission': forms.DateInput(attrs={'type': 'date'}),
-            'submission_to_database': forms.DateInput(attrs={'type': 'date'}),
+            'date_delivery': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'date_submission': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'submission_to_database': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'shipment_date_time': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-            'withdrawal_from_bases': forms.DateInput(attrs={'type': 'date'}),
+            'withdrawal_from_bases': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }

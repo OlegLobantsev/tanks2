@@ -20,6 +20,7 @@ class Record(models.Model):
     def get_days_total(self):
         delta = self.withdrawal_from_bases - self.date_submission
         return delta.days
+
     def __str__(self):
         return f"Record {self.number}"
 

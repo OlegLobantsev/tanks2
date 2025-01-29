@@ -6,7 +6,7 @@ class RecordForm(forms.ModelForm):
     class Meta:
         model = Record
         fields = [
-            'number', 'weight', 'file1', 'date_delivery',
+            'number', 'weight', 'file1', 'date_delivery', 'delivery',
             'date_submission', 'submission_to_database',
             'shipment_date_time', 'withdrawal_from_bases', 'file3', 'file4', 'file2'
         ]

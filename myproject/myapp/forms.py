@@ -8,7 +8,7 @@ class RecordForm(forms.ModelForm):
         fields = [
             'number', 'weight', 'file1', 'date_delivery',
             'date_submission', 'submission_to_database',
-            'shipment_date_time', 'withdrawal_from_bases', 'file2'
+            'shipment_date_time', 'withdrawal_from_bases', 'file3', 'file4', 'file2'
         ]
         widgets = {
             'date_delivery': forms.DateTimeInput(attrs={'type': 'datetime-local'}),

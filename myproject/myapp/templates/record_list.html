@@ -1,86 +1,198 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Вагоны</h1>
+<h1 class="mb-4">Вагоны</h1>
+
+<!-- Стили для таблицы и модального окна -->
 <style>
-    table, td, th {
-  border: 3px solid #245488;
-}
-
-    th, td {
-  padding: 1px 1px;
-  text-align: center;
-
-    .text-oc {
-  color: #ff6247;
+    .table-custom {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
     }
-}
+    .table-custom th,
+    .table-custom td {
+        border: 1px solid #ddd;
+        padding: 4px;
+        text-align: center;
+        vertical-align: middle;
+    }
+    .table-custom th {
+        background-color: #245488;
+        color: white;
+        font-weight: bold;
+    }
+    .table-custom tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    .table-custom tbody tr:hover {
+        background-color: #f1f1f1;
+        cursor: pointer;
+    }
+    .text-oc {
+        color: #ff6247;
+        font-weight: bold;
+    }
+    .actions-column {
+        justify-content: center;
+        gap: 10px;
+    }
+    .actions-column a {
+        text-decoration: none;
+    }
+    .add-button {
+        margin-top: 20px;
+        text-align: center;
+    }
+    .add-button img {
+        width: 50px;
+        height: 50px;
+    }
+    @media (max-width: 768px) {
+        .table-custom {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+    }
+
+    /* Стили для модального окна */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4);
+    }
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 500px;
+    }
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
 </style>
-<table>
+
+<!-- Таблица -->
+<table class="table-custom">
     <thead>
         <tr>
             <th>Номер вагона</th>
             <th>Вес</th>
-            <th>Квитанция</th>
             <th>Дата по накладной</th>
             <th>Дата прибытия на станцию</th>
-            <th>Просрочка</th>
+            <th>Просрочка РЖД</th>
+            <th>Просрочка подачи</th>
             <th>Дата подачи на базу</th>
             <th>Уведомление о завершении грузовой операции</th>
             <th>Дата уборки</th>
+            <th>Просрочка уборки</th>
             <th>Общее время</th>
-            <th>Акт приемосдатчика</th>
+            <th>Документы</th>
             <th>Действия</th>
         </tr>
     </thead>
     <tbody>
         {% for record in records %}
-        <tr>
+        <tr onclick="openModal(
+            '{% if record.file1 %}{{ record.file1.url }}{% endif %}',
+            '{% if record.file2 %}{{ record.file2.url }}{% endif %}',
+            '{% if record.file3 %}{{ record.file3.url }}{% endif %}',
+            '{% if record.file4 %}{{ record.file4.url }}{% endif %}' )" >
             <td>{{ record.number }}</td>
-            <td>{{ record.weight }}</td>
+            <td>{{ record.weight|default_if_none:"-"  }}</td>
+            <td>{{ record.date_delivery|date:'d.m.Y' }}<br>{{ record.date_delivery|date:'H:i' }}</td>
+            <td>{{ record.date_submission|date:'d.m.Y' }}<br>{{ record.date_submission|date:'H:i' }}</td>
             <td>
-                {% if record.file1 %}
-                <a href="{{ record.file1.url }}">
-                <img
-                src="https://img.icons8.com/?size=30&id=8ZGZTnARklCg&format=png&color=228BE6">
-                </a>
-                {% else %}
-                {% endif %}
+                <span class="text-oc">
+                    {% if record.get_days_late != 0 %}
+                        {{ record.get_days_late }}
+                    {% endif %}
+                </span>
             </td>
-            <td>{{ record.date_delivery|date:'d.m.Y H:i' }}</td>
-            <td>{{ record.date_submission|date:'d.m.Y H:i' }}</td>
-            <td><span class="text-oc">
-                {% if record.get_days_late == 0 %}
-                {% else %}
-                {{ record.get_days_late }}
-                {% endif %}</span></td>
-            <td>{{ record.submission_to_database|date:'d.m.Y H:i' }}</td>
-            <td>{{ record.shipment_date_time|date:'d.m.Y H:i' }}</td>
-            <td>{{ record.withdrawal_from_bases|date:'d.m.Y H:i' }}</td>
+            <td><span class="text-oc">{{ record.get_delay_1 }}</span></td>
+            <td>{{ record.submission_to_database|date:'d.m.Y' }}<br>{{ record.submission_to_database|date:'H:i' }}</td>
+            <td>{{ record.shipment_date_time|date:'d.m.Y' }}<br>{{ record.shipment_date_time|date:'H:i' }}</td>
+            <td>{{ record.withdrawal_from_bases|date:'d.m.Y' }}<br>{{ record.withdrawal_from_bases|date:'H:i' }}</td>
+            <td><span class="text-oc">{{ record.get_delay_2 }}</span></td>
             <td><span class="text-oc">{{ record.get_days_total }}</span></td>
-            <td>
-                {% if record.file2 %}
-                <a href="{{ record.file2.url }}">
-                <img
-                src="https://img.icons8.com/?size=30&id=8ZGZTnARklCg&format=png&color=228BE6"></a>
-                {% else %}
-                {% endif %}
-            </td>
-            <td>
+            <td>Документы</td>
+            <td class="actions-column">
                 <a href="{% url 'record_update' record.pk %}">
-                    <img
-                    src="https://img.icons8.com/?size=20&id=47749&format=png&color=228BE6"> </a>
-                <a href="{% url 'record_delete' record.pk %}">
-                    <img
-                    src="https://img.icons8.com/?size=20&id=11767&format=png&color=228BE6"> </a>
+                    <img src="https://img.icons8.com/?size=20&id=47749&format=png&color=228BE6" alt="Редактировать">
+                </a>
+                <a href="{% url 'record_delete' record.pk %}" onclick="return confirm('Вы уверены, что хотите удалить эту запись?');">
+                    <img src="https://img.icons8.com/?size=20&id=11767&format=png&color=228BE6" alt="Удалить">
+                </a>
             </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
-<a href="{% url 'record_create' %}">
-   <img
-   src="https://img.icons8.com/?size=50&id=40097&format=png&color=228BE6"> </a>
-{% endblock %}
 
-https://img.icons8.com/?size=100&id=47749&format=png&color=228BE6
+<!-- Кнопка добавления записи -->
+<div class="add-button">
+    <a href="{% url 'record_create' %}">
+        <img src="https://img.icons8.com/?size=50&id=40097&format=png&color=228BE6" alt="Добавить запись">
+    </a>
+</div>
+
+<!-- Модальное окно для документов -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Документы</h2>
+        <div id="modal-links">
+            <!-- Ссылки на файлы будут вставлены сюда -->
+        </div>
+    </div>
+</div>
+
+<script>
+    // Функция для открытия модального окна
+    function openModal(file1, file2, file3, file4) {
+        var modal = document.getElementById("myModal");
+        var links = document.getElementById("modal-links");
+        links.innerHTML = ""; // Очищаем предыдущие ссылки
+
+        // Добавляем ссылки на файлы, если они существуют
+        if (file1) links.innerHTML += `<a href="${file1}" target="_blank">Квитанция</a><br>`;
+        if (file2) links.innerHTML += `<a href="${file2}" target="_blank">Акт приемосдатчика</a><br>`;
+        if (file3) links.innerHTML += `<a href="${file3}" target="_blank">Претензия</a><br>`;
+        if (file4) links.innerHTML += `<a href="${file4}" target="_blank">Претензия РЖД</a><br>`;
+
+        modal.style.display = "block"; // Показываем модальное окно
+    }
+
+    // Функция для закрытия модального окна
+    function closeModal() {
+        var modal = document.getElementById("myModal");
+        modal.style.display = "none";
+    }
+
+    // Закрытие модального окна при клике вне его области
+    window.onclick = function(event) {
+        var modal = document.getElementById("myModal");
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+{% endblock %}

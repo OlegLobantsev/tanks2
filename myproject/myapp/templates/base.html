@@ -1,74 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arkon's tanks</title>
-    <!-- Bootstrap CSS (optional, for styling) -->
+    <title>Arkon's Tanks</title>
+    <!-- Подключение Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
             margin: 0;
             padding: 0;
-            background-color: #f8f9fa;
         }
+
         header {
-            background-color: #007bff;
+            background-color: #245488;
             color: white;
             padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
         header a {
             color: white;
             text-decoration: none;
             margin: 0 10px;
+            font-weight: bold;
         }
+
         header a:hover {
             text-decoration: underline;
         }
+
         .container {
             max-width: 1200px;
-            margin: 20px auto;
+            margin: initial;
             padding: 20px;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            /* background-color: white; */
+            /* border-radius: 8px; */
+            /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
         }
+
         .messages {
             margin: 20px 0;
         }
+
         .messages .alert {
             padding: 10px;
             margin-bottom: 10px;
             border-radius: 4px;
         }
+
         .messages .alert-success {
             background-color: #d4edda;
             color: #155724;
+            border: 1px solid #c3e6cb;
         }
+
         .messages .alert-error {
             background-color: #f8d7da;
             color: #721c24;
+            border: 1px solid #f5c6cb;
         }
-        .login-container {
+
+        .login-container, .logout-container {
             max-width: 400px;
             margin: 50px auto;
             padding: 20px;
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
 
-        .login-container h2 {
-            text-align: center;
+        .login-container h2, .logout-container h2 {
             margin-bottom: 20px;
             color: #007bff;
         }
 
         .form-group {
             margin-bottom: 15px;
+            text-align: left;
         }
 
         .form-group label {
@@ -112,46 +127,15 @@
         .mt-3 a:hover {
             text-decoration: underline;
         }
-            .logout-container {
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
 
-        .logout-container h2 {
-            margin-bottom: 15px;
-            color: #007bff;
-        }
-
-        .logout-container p {
-            margin-bottom: 20px;
-            font-size: 16px;
-        }
-
-        .btn-primary {
-            padding: 10px 20px;
-            background-color: #007bff;
-            border: none;
-            border-radius: 4px;
-            color: white;
-            font-size: 16px;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
         input[type="number"] {
             -moz-appearance: textfield;
         }
+
         input[type="number"]::-webkit-inner-spin-button {
             display: none;
         }
+
         input[type="date"]::-webkit-calendar-picker-indicator {
             color: transparent;
             opacity: 1;
@@ -168,9 +152,9 @@
         <div>
             {% if user.is_authenticated %}
                 <span>Пользователь: {{ user.username }}</span>
-                <form action="{% url 'logout' %}" method="post">
+                <form action="{% url 'logout' %}" method="post" style="display: inline;">
                     {% csrf_token %}
-                    <button type="submit">Выйти</button>
+                    <button type="submit" class="btn-primary" style="padding: 5px 10px; font-size: 14px;">Выйти</button>
                 </form>
             {% else %}
                 <a href="{% url 'login' %}">Войти</a>
@@ -179,7 +163,7 @@
     </header>
 
     <div class="container">
-        <!-- Display messages -->
+        <!-- Отображение сообщений -->
         {% if messages %}
         <div class="messages">
             {% for message in messages %}
@@ -190,12 +174,12 @@
         </div>
         {% endif %}
 
-        <!-- Main content block -->
+        <!-- Основной блок контента -->
         {% block content %}
         {% endblock %}
     </div>
 
-    <!-- Bootstrap JS (optional, for styling) -->
+    <!-- Подключение Bootstrap JS (опционально) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

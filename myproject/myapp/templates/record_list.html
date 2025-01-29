@@ -60,33 +60,61 @@
     .modal {
         display: none;
         position: fixed;
-        z-index: 1;
+        z-index: 1000;
         left: 0;
         top: 0;
         width: 100%;
         height: 100%;
         overflow: auto;
-        background-color: rgba(0,0,0,0.4);
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        animation: fadeIn 0.3s ease-in-out;
     }
     .modal-content {
-        background-color: #fefefe;
-        margin: 15% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
+        background-color: #fff;
+        margin: 10% auto;
+        padding: 25px;
+        border: none;
+        border-radius: 10px;
+        width: 90%;
         max-width: 500px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        animation: slideIn 0.3s ease-in-out;
     }
     .close {
         color: #aaa;
         float: right;
         font-size: 28px;
         font-weight: bold;
+        cursor: pointer;
+        transition: color 0.2s ease;
     }
     .close:hover,
     .close:focus {
-        color: black;
+        color: #333;
+    }
+    #modal-links a {
+        display: block;
+        margin: 10px 0;
+        padding: 10px;
+        background-color: #f1f1f1;
+        border-radius: 5px;
         text-decoration: none;
-        cursor: pointer;
+        color: #245488;
+        font-weight: bold;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+    #modal-links a:hover {
+        background-color: #e1e1e1;
+        transform: translateX(5px);
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    @keyframes slideIn {
+        from { transform: translateY(-20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
     }
 </style>
 
@@ -173,10 +201,10 @@
         links.innerHTML = ""; // Очищаем предыдущие ссылки
 
         // Добавляем ссылки на файлы, если они существуют
-        if (file1) links.innerHTML += `<a href="${file1}" target="_blank">Квитанция</a><br>`;
-        if (file2) links.innerHTML += `<a href="${file2}" target="_blank">Акт приемосдатчика</a><br>`;
-        if (file3) links.innerHTML += `<a href="${file3}" target="_blank">Претензия</a><br>`;
-        if (file4) links.innerHTML += `<a href="${file4}" target="_blank">Претензия РЖД</a><br>`;
+        if (file1) links.innerHTML += `<a href="${file1}" target="_blank">Квитанция</a>`;
+        if (file2) links.innerHTML += `<a href="${file2}" target="_blank">Акт приемосдатчика</a>`;
+        if (file3) links.innerHTML += `<a href="${file3}" target="_blank">Претензия</a>`;
+        if (file4) links.innerHTML += `<a href="${file4}" target="_blank">Претензия РЖД</a>`;
 
         modal.style.display = "block"; // Показываем модальное окно
     }

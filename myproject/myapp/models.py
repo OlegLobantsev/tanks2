@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from datetime import timedelta
 
 class Record(models.Model):
     number = models.IntegerField(unique=True)
@@ -15,28 +16,34 @@ class Record(models.Model):
     file4 = models.FileField(upload_to='files/', blank=True, null=True)
     delivery = models.IntegerField(default=5)
 
-    def get_difference(self):
-        difference = self.date_submission-self.date_delivery
-        print(difference.days)
-        return difference.days
+    def get_difference(self) -> int:
+        difference = (self.date_submission - self.date_delivery).days
+        return difference if difference >= 0 else 0
 
-    def get_days_late(self):
+    def get_days_late(self) -> int:
         difference = self.get_difference()
-        if difference > self.delivery:
-            delta = difference - self.delivery
-        return delta
-    def get_days_total(self):
-        delta = self.get_delay_1() + self.get_delay_2()
-        return delta
-    def get_delay_1(self):
-        delta = self.submission_to_database - self.date_submission
-        return delta.days
-    def get_delay_2(self):
-        delta = self.withdrawal_from_bases - self.shipment_date_time
-        return delta.days
+        return max(difference - self.delivery, 0)
 
-    def __str__(self):
+    def get_days_total(self) -> int:
+        return self.get_delay_1() + self.get_delay_2()
+
+    def get_delay_1(self) -> int:
+        if self.submission_to_database and self.date_submission:
+            delta = self.submission_to_database - self.date_submission
+            return max(delta.days, 0) if delta.total_seconds() >= 0 else 0
+        return 0
+
+    def get_delay_2(self) -> int:
+        if self.withdrawal_from_bases and self.shipment_date_time:
+            delta = self.withdrawal_from_bases - self.shipment_date_time
+            if delta.total_seconds() <= 23 * 3600:
+                return 0
+            late_seconds = delta.total_seconds() - 23 * 3600
+            return int(late_seconds // 86400) + (1 if late_seconds % 86400 else 0)
+        return 0
+
+    def __str__(self) -> str:
         return f"Record {self.number}"
 
-    def get_absolute_url(self):
+    def get_absolute_url(self) -> str:
         return reverse('record_list')

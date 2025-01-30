@@ -146,13 +146,13 @@
             <td>{{ record.date_delivery|date:'d.m.Y' }}<br>{{ record.date_delivery|date:'H:i' }}</td>
             <td>{{ record.delivery }}</td>
             <td>{{ record.date_submission|date:'d.m.Y' }}<br>{{ record.date_submission|date:'H:i' }}</td>
-            <td><span class="text-oc">{{ record.get_days_late }}</span></td>
+            <td><span class="text-oc">{% if record.get_days_late > 0%}{{ record.get_days_late }}{% endif %}</span></td>
             <td>{{ record.submission_to_database|date:'d.m.Y' }}<br>{{ record.submission_to_database|date:'H:i' }}</td>
-            <td><span class="text-oc">{{ record.get_delay_1 }}</span></td>
+            <td><span class="text-oc">{% if record.get_delay_1 > 0%}{{ record.get_delay_1 }}{% endif %}</span></td>
             <td>{{ record.shipment_date_time|date:'d.m.Y' }}<br>{{ record.shipment_date_time|date:'H:i' }}</td>
             <td>{{ record.withdrawal_from_bases|date:'d.m.Y' }}<br>{{ record.withdrawal_from_bases|date:'H:i' }}</td>
-            <td><span class="text-oc">{{ record.get_delay_2 }}</span></td>
-            <td><span class="text-oc">{{ record.get_days_total }}</span></td>
+            <td><span class="text-oc">{% if record.get_delay_2 > 0%}{{ record.get_delay_2 }}{% endif %}</span></td>
+            <td><span class="text-oc">{% if record.get_days_total > 0%}{{ record.get_days_total }}{% endif %}</span></td>
             <td onclick="openModal(
                 '{% if record.file1 %}{{ record.file1.url }}{% endif %}',
                 '{% if record.file2 %}{{ record.file2.url }}{% endif %}',

@@ -3,7 +3,7 @@ from .models import Record
 
 # Константа для хранения списка полей
 FIELDS = [
-    'number', 'weight', 'file1', 'date_delivery', 'delivery',
+    'number', 'weight', 'file1', 'date_delivery',
     'date_submission', 'submission_to_database',
     'shipment_date_time', 'withdrawal_from_bases', 'file2', 'file3', 'file4'
 ]

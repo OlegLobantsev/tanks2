@@ -3,7 +3,7 @@ from django.urls import reverse
 from datetime import timedelta
 
 class Record(models.Model):
-    number = models.IntegerField(unique=True)
+    number = models.IntegerField()
     weight = models.FloatField(blank=True, null=True)
     file1 = models.FileField(upload_to='files/', blank=True, null=True)
     date_delivery = models.DateTimeField()
@@ -14,15 +14,15 @@ class Record(models.Model):
     file2 = models.FileField(upload_to='files/', blank=True, null=True)
     file3 = models.FileField(upload_to='files/', blank=True, null=True)
     file4 = models.FileField(upload_to='files/', blank=True, null=True)
-    delivery = models.IntegerField(default=5)
+    # delivery = models.IntegerField(default=5)
 
     def get_difference(self) -> int:
         difference = (self.date_submission - self.date_delivery).days
         return difference if difference >= 0 else 0
 
-    def get_days_late(self) -> int:
-        difference = self.get_difference()
-        return max(difference - self.delivery, 0)
+    # def get_days_late(self) -> int:
+    #     difference = self.get_difference()
+    #     return max(difference - self.delivery, 0)
 
     def get_days_total(self) -> int:
         return self.get_delay_1() + self.get_delay_2()

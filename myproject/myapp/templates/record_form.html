@@ -1,105 +1,112 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block content %}
 <div class="container mt-4">
-    <h1 class="mb-4">{% if object %}Редактирование{% else %}Создание{% endif %} записи</h1>
+    <h1 class="mb-3">{% if object %}Редактирование{% else %}Создание{% endif %} записи</h1>
     <!-- Форма -->
     <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
         {% csrf_token %}
-        <!-- Номер вагона -->
-        <div class="mb-3">
-            <label for="id_number" class="form-label fw-bold">Номер вагона:</label>
-            {{ form.number }}
-            <div class="invalid-feedback">
-                Пожалуйста, введите номер вагона.
+        <div class="row g-3">
+            <!-- Группа 1: Основные данные -->
+            <div class="col-md-6">
+                <h5 class="mb-2">Основные данные</h5>
+                <!-- Номер вагона -->
+                <div class="mb-2">
+                    <label for="id_number" class="form-label fw-bold">Номер вагона:</label>
+                    {{ form.number }}
+                    <div class="invalid-feedback">
+                        Пожалуйста, введите номер вагона.
+                    </div>
+                </div>
+                <!-- Вес -->
+                <div class="mb-2">
+                    <label for="id_weight" class="form-label fw-bold">Вес:</label>
+                    {{ form.weight }}
+                    <div class="invalid-feedback">
+                        Пожалуйста, введите вес.
+                    </div>
+                </div>
+                <!-- Срок поставки -->
+                <div class="mb-2">
+                    <label for="id_delivery" class="form-label fw-bold">Срок поставки (дни):</label>
+                    {{ form.delivery }}
+                    <div class="invalid-feedback">
+                        Пожалуйста, введите срок поставки.
+                    </div>
+                </div>
             </div>
-        </div>
-        <!-- Вес -->
-        <div class="mb-3">
-            <label for="id_weight" class="form-label fw-bold">Вес:</label>
-            {{ form.weight }}
-            <div class="invalid-feedback">
-                Пожалуйста, введите вес.
+
+            <!-- Группа 2: Даты -->
+            <div class="col-md-6">
+                <h5 class="mb-2">Даты</h5>
+                <!-- Дата по накладной -->
+                <div class="mb-2">
+                    <label for="id_date_delivery" class="form-label fw-bold">Дата по накладной:</label>
+                    <input type="datetime-local" class="form-control" id="id_date_delivery" name="date_delivery"
+                           value="{{ form.date_delivery.value|date:'Y-m-d\TH:i' }}" required>
+                    <div class="invalid-feedback">
+                        Пожалуйста, введите дату по накладной.
+                    </div>
+                </div>
+                <!-- Дата прибытия на станцию -->
+                <div class="mb-2">
+                    <label for="id_date_submission" class="form-label fw-bold">Дата прибытия на станцию:</label>
+                    <input type="datetime-local" class="form-control" id="id_date_submission" name="date_submission"
+                           value="{{ form.date_submission.value|date:'Y-m-d\TH:i' }}" required>
+                    <div class="invalid-feedback">
+                        Пожалуйста, введите дату прибытия.
+                    </div>
+                </div>
+                <!-- Дата подачи на базу -->
+                <div class="mb-2">
+                    <label for="id_submission_to_database" class="form-label fw-bold">Дата подачи на базу:</label>
+                    <input type="datetime-local" class="form-control" id="id_submission_to_database" name="submission_to_database"
+                           value="{{ form.submission_to_database.value|date:'Y-m-d\TH:i' }}" required>
+                    <div class="invalid-feedback">
+                        Пожалуйста, введите дату подачи.
+                    </div>
+                </div>
+                <!-- Дата уборки -->
+                <div class="mb-2">
+                    <label for="id_withdrawal_from_bases" class="form-label fw-bold">Дата уборки:</label>
+                    <input type="datetime-local" class="form-control" id="id_withdrawal_from_bases" name="withdrawal_from_bases"
+                           value="{{ form.withdrawal_from_bases.value|date:'Y-m-d\TH:i' }}" required>
+                    <div class="invalid-feedback">
+                        Пожалуйста, введите дату уборки.
+                    </div>
+                </div>
             </div>
-        </div>
-        <!-- Квитанция -->
-        <div class="mb-3">
-            <label for="id_file1" class="form-label fw-bold">Квитанция:</label>
-            {{ form.file1 }}
-        </div>
-        <!-- Дата по накладной -->
-        <div class="mb-3">
-            <label for="id_date_delivery" class="form-label fw-bold">Дата по накладной:</label>
-            <input type="datetime-local" class="form-control" id="id_date_delivery" name="date_delivery"
-                   value="{{ form.date_delivery.value|date:'Y-m-d\TH:i' }}" required>
-            <div class="invalid-feedback">
-                Пожалуйста, введите дату по накладной.
+
+            <!-- Группа 3: Документы -->
+            <div class="col-12">
+                <h5 class="mb-2">Документы</h5>
+                <!-- Квитанция -->
+                <div class="mb-2">
+                    <label for="id_file1" class="form-label fw-bold">Квитанция:</label>
+                    {{ form.file1 }}
+                </div>
+                <!-- Акт приемосдатчика -->
+                <div class="mb-2">
+                    <label for="id_file2" class="form-label fw-bold">Акт приемосдатчика:</label>
+                    {{ form.file2 }}
+                </div>
+                <!-- Претензия -->
+                <div class="mb-2">
+                    <label for="id_file3" class="form-label fw-bold">Претензия:</label>
+                    {{ form.file3 }}
+                </div>
+                <!-- Претензия РЖД -->
+                <div class="mb-2">
+                    <label for="id_file4" class="form-label fw-bold">Претензия РЖД:</label>
+                    {{ form.file4 }}
+                </div>
             </div>
-        </div>
-        <!-- Срок поставки -->
-        <div class="mb-3">
-            <label for="id_delivery" class="form-label fw-bold">Срок поставки:</label>
-            {{ form.delivery }}
-            <div class="invalid-feedback">
-                Пожалуйста, введите срок поставки (в днях).
+
+            <!-- Кнопки -->
+            <div class="col-12 d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary me-2">Сохранить</button>
+                <a href="/" class="btn btn-secondary">Отмена</a>
             </div>
-        </div>
-        <!-- Дата прибытия на станцию -->
-        <div class="mb-3">
-            <label for="id_date_submission" class="form-label fw-bold">Дата прибытия на станцию:</label>
-            <input type="datetime-local" class="form-control" id="id_date_submission" name="date_submission"
-                   value="{{ form.date_submission.value|date:'Y-m-d\TH:i' }}" required>
-            <div class="invalid-feedback">
-                Пожалуйста, введите дату прибытия на станцию.
-            </div>
-        </div>
-        <!-- Дата подачи на базу -->
-        <div class="mb-3">
-            <label for="id_submission_to_database" class="form-label fw-bold">Дата подачи на базу:</label>
-            <input type="datetime-local" class="form-control" id="id_submission_to_database" name="submission_to_database"
-                   value="{{ form.submission_to_database.value|date:'Y-m-d\TH:i' }}" required>
-            <div class="invalid-feedback">
-                Пожалуйста, введите дату подачи на базу.
-            </div>
-        </div>
-        <!-- Уведомление о завершении грузовой операции -->
-        <div class="mb-3">
-            <label for="id_shipment_date_time" class="form-label fw-bold">Уведомление о завершении грузовой операции:</label>
-            <input type="datetime-local" class="form-control" id="id_shipment_date_time" name="shipment_date_time"
-                   value="{{ form.shipment_date_time.value|date:'Y-m-d\TH:i' }}" required>
-            <div class="invalid-feedback">
-                Пожалуйста, введите дату уведомления.
-            </div>
-        </div>
-        <!-- Дата уборки -->
-        <div class="mb-3">
-            <label for="id_withdrawal_from_bases" class="form-label fw-bold">Дата уборки:</label>
-            <input type="datetime-local" class="form-control" id="id_withdrawal_from_bases" name="withdrawal_from_bases"
-                   value="{{ form.withdrawal_from_bases.value|date:'Y-m-d\TH:i' }}" required>
-            <div class="invalid-feedback">
-                Пожалуйста, введите дату уборки.
-            </div>
-        </div>
-        <!-- Акт приемосдатчика -->
-        <div class="mb-3">
-            <label for="id_file2" class="form-label fw-bold">Акт приемосдатчика:</label>
-            {{ form.file2 }}
-        </div>
-        <!-- Претензия -->
-        <div class="mb-3">
-            <label for="id_file3" class="form-label fw-bold">Претензия:</label>
-            {{ form.file3 }}
-        </div>
-        <!-- Претензия РЖД -->
-        <div class="mb-3">
-            <label for="id_file4" class="form-label fw-bold">Претензия РЖД:</label>
-            {{ form.file4 }}
-        </div>
-        <!-- Кнопки -->
-        <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-primary">Сохранить</button>
-            <a href="/" class="btn btn-secondary">Отмена</a>
         </div>
     </form>
 </div>

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
 {% block content %}
 <h1 class="mb-4">Вагоны</h1>
 
@@ -117,13 +118,8 @@
     }
 </style>
 
-<!-- Форма для фильтрации -->
-<div class="filter-form">
-    <input type="text" id="filterInput" placeholder="Введите номер вагона÷" onkeyup="filterTable()">
-</div>
-
 <!-- Таблица -->
-<table class="table-custom" id="recordsTable">
+<table class="table-custom">
     <thead>
         <tr>
             <th>Номер вагона</th>
@@ -148,13 +144,13 @@
             <td>{{ record.weight|default_if_none:"-" }}</td>
             <td>{{ record.date_delivery|date:'d.m.Y' }}<br>{{ record.date_delivery|date:'H:i' }}</td>
             <td>{{ record.date_submission|date:'d.m.Y' }}<br>{{ record.date_submission|date:'H:i' }}</td>
-            <td><span class="text-oc">{% if record.get_difference > 0 %}{{ record.get_difference }}{% endif %}</span></td>
+            <td><span class="text-oc">{% if record.get_difference > 0%}{{ record.get_difference }}{% endif %}</span></td>
             <td>{{ record.submission_to_database|date:'d.m.Y' }}<br>{{ record.submission_to_database|date:'H:i' }}</td>
-            <td><span class="text-oc">{% if record.get_delay_1 > 0 %}{{ record.get_delay_1 }}{% endif %}</span></td>
+            <td><span class="text-oc">{% if record.get_delay_1 > 0%}{{ record.get_delay_1 }}{% endif %}</span></td>
             <td>{{ record.shipment_date_time|date:'d.m.Y' }}<br>{{ record.shipment_date_time|date:'H:i' }}</td>
             <td>{{ record.withdrawal_from_bases|date:'d.m.Y' }}<br>{{ record.withdrawal_from_bases|date:'H:i' }}</td>
-            <td><span class="text-oc">{% if record.get_delay_2 > 0 %}{{ record.get_delay_2 }}{% endif %}</span></td>
-            <td><span class="text-oc">{% if record.get_days_total > 0 %}{{ record.get_days_total }}{% endif %}</span></td>
+            <td><span class="text-oc">{% if record.get_delay_2 > 0%}{{ record.get_delay_2 }}{% endif %}</span></td>
+            <td><span class="text-oc">{% if record.get_days_total > 0%}{{ record.get_days_total }}{% endif %}</span></td>
             <td onclick="openModal(
                 '{% if record.file1 %}{{ record.file1.url }}{% endif %}',
                 '{% if record.file2 %}{{ record.file2.url }}{% endif %}',
@@ -200,11 +196,13 @@
         var modal = document.getElementById("myModal");
         var links = document.getElementById("modal-links");
         links.innerHTML = ""; // Очищаем предыдущие ссылки
+
         // Добавляем ссылки на файлы, если они существуют
         if (file1) links.innerHTML += `<a href="${file1}" download="{{ file1 }}" target="_blank">Квитанция</a>`;
         if (file2) links.innerHTML += `<a href="${file2}" download="{{ file2 }}" target="_blank">Акт приемосдатчика</a>`;
         if (file3) links.innerHTML += `<a href="${file3}" download="{{ file3 }}" target="_blank">Претензия</a>`;
         if (file4) links.innerHTML += `<a href="${file4}" download="{{ file4 }}" target="_blank">Претензия РЖД</a>`;
+
         modal.style.display = "block"; // Показываем модальное окно
     }
 
@@ -219,25 +217,6 @@
         var modal = document.getElementById("myModal");
         if (event.target == modal) {
             modal.style.display = "none";
-        }
-    }
-
-    // Функция для фильтрации таблицы
-    function filterTable() {
-        var input = document.getElementById("filterInput").value.toLowerCase();
-        var table = document.getElementById("recordsTable");
-        var rows = table.getElementsByTagName("tr");
-
-        for (var i = 1; i < rows.length; i++) { // Начинаем с 1, чтобы пропустить заголовок
-            var cell = rows[i].getElementsByTagName("td")[0]; // Первый столбец - "Номер вагона"
-            if (cell) {
-                var value = cell.textContent || cell.innerText;
-                if (value.toLowerCase().indexOf(input) > -1) {
-                    rows[i].style.display = "";
-                } else {
-                    rows[i].style.display = "none";
-                }
-            }
         }
     }
 </script>
